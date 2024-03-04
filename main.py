@@ -8,12 +8,12 @@ def startDownload():
         ytLink = link.get()
         ytObject = YouTube(ytLink, on_progress_callback=on_progress)
         video = ytObject.streams.get_highest_resolution()  # gets highest resolution video
-        title.configure(text=ytObject.title, text_color="black")
+        title.configure(text=ytObject.title, text_color="white")
         finishLabel.configure(text="")
         video.download()
-        finishLabel.configure(text="Download complete!")
+        finishLabel.configure(text="Download completed!", text_color="green", font=("Calibri", 15, "bold"))
     except:
-        finishLabel.configure(text="Download Error", text_color="red")
+        finishLabel.configure(text="Download Error", text_color="red", font=("Calibri", 15, "bold"))
     
 def on_progress(stream, chunk, bytes_remaining):
     total_size = stream.filesize
@@ -27,38 +27,47 @@ def on_progress(stream, chunk, bytes_remaining):
     progressBar.set(float(completion_percentage) / 100)
 
 # default system settings
-customtkinter.set_appearance_mode("System")
+customtkinter.set_appearance_mode("dark")
 customtkinter.set_default_color_theme("blue")
 
 # App frame
 app = customtkinter.CTk()  # initializes
+
 app.geometry("720x480")  # screen size
 app.title("Youtube Downloader")
 
+
 # Add UI Elements
-title = customtkinter.CTkLabel(app, text="Insert a Youtube link")  # first argument specifies where to put item
+# first argument specifies where to put item
+app_title = customtkinter.CTkLabel(app, text="Youtube Video Downloader", font=("Calibri", 30, "bold"))
+app_title.pack(padx=10, pady=10)
+
+title = customtkinter.CTkLabel(app, text="Insert a Youtube Link:", font=("Calibri", 20))  
 title.pack(padx=10, pady=10)
 
 # Create input box to put in Youtube link
 url_var = tkinter.StringVar()
-link = customtkinter.CTkEntry(app, width=350, height=40, textvariable=url_var)
+link = customtkinter.CTkEntry(app, width=350, height=40, textvariable=url_var, font=("Calibri", 15))
 link.pack()
+
+# Create Download button
+download = customtkinter.CTkButton(app, text="Download!", command=startDownload, font=("Calibri", 15),
+                                   fg_color="lightcoral", hover_color="lightpink", width=45, height=45,
+                                   text_color="black")
+download.pack(padx=10, pady=20)
+
+# Create progress bar
+progressBar = customtkinter.CTkProgressBar(app, width=400, progress_color="lightcoral")
+progressBar.set(0)  # initalizes to 0%
+progressBar.pack(padx=10, pady=10)
+
+# Progress percentage
+pPercentage = customtkinter.CTkLabel(app, text="0%", font=("Calibri", 15))
+pPercentage.pack()
 
 # Finished Downloading text
 finishLabel = customtkinter.CTkLabel(app, text="")
 finishLabel.pack()
 
-# Progress percentage
-pPercentage = customtkinter.CTkLabel(app, text="0%")
-pPercentage.pack()
-
-progressBar = customtkinter.CTkProgressBar(app, width=400)
-progressBar.set(0)  # initalizes to 0%
-progressBar.pack(padx=10, pady=10)
-
-# Create Download button
-download = customtkinter.CTkButton(app, text="Download", command=startDownload)
-download.pack(padx=10, pady=10)
-
-# Run app
+# Runs the app
 app.mainloop();
