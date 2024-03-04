@@ -3,7 +3,7 @@ import customtkinter
 from pytube import YouTube
 
 # function to download the video
-def startDownload():
+def startDownload(event=None):
     try:
         ytLink = link.get()
         ytObject = YouTube(ytLink, on_progress_callback=on_progress)
@@ -55,6 +55,8 @@ download = customtkinter.CTkButton(app, text="Download!", command=startDownload,
                                    fg_color="lightcoral", hover_color="lightpink", width=45, height=45,
                                    text_color="black")
 download.pack(padx=10, pady=20)
+
+app.bind("<Return>", startDownload)  # allows user to press "Enter" on keyboard to download
 
 # Create progress bar
 progressBar = customtkinter.CTkProgressBar(app, width=400, progress_color="lightcoral")
